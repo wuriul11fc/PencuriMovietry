@@ -1,19 +1,18 @@
-// server.js
 const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
 const pencuriProvider = require('./provider.js');
 
 const manifest = {
     id: "org.pencurimovie.local",
     version: "1.0.0",
-    name: "PencuriMovie (Local PC)",
-    description: "Penstriman terus dari web tempatan tanpa torrent.",
+    name: "PencuriMovie (Cloud)",
+    description: "Penstriman terus dari web tempatan via Render.",
     resources: ["catalog", "stream"],
     types: ["movie"],
     idPrefixes: ["pm_"],
     catalogs: [{
         type: "movie",
         id: "pm_catalog",
-        name: "Katalog Utama"
+        name: "PencuriMovie - Katalog"
     }]
 };
 
@@ -47,9 +46,9 @@ builder.defineStreamHandler(async (args) => {
         const streams = await pencuriProvider.dapatkanStreamLinks(urlAsal);
         
         const formatStreams = streams.map(link => {
-            let namaServer = "DSVPLAY";
-            if (link.includes('voe')) { namaServer = "VOE"; }
-            if (link.includes('streamtape')) { namaServer = "STREAMTAPE"; }
+            let namaServer = "PLAYER";
+            if (link.includes('voe')) namaServer = "VOE";
+            if (link.includes('streamtape')) namaServer = "STREAMTAPE";
             
             return {
                 url: link,
@@ -62,11 +61,7 @@ builder.defineStreamHandler(async (args) => {
     return { streams: [] };
 });
 
-// Dapatkan port dari Render, atau guna 7000 jika dijalankan di PC
 const PORT = process.env.PORT || 7000;
-
 serveHTTP(builder.getInterface(), { port: PORT });
 
-console.log(`✅ Server Add-on Stremio Berjaya Dihidupkan di port ${PORT}!`);
-console.log("-> Jika di Render: Gunakan pautan web Render ditambah dengan /manifest.json");
-console.log(`-> Jika di PC: http://127.0.0.1:${PORT}/manifest.json`);
+console.log(`✅ Add-on Stremio aktif di port ${PORT}`);

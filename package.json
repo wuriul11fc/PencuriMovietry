@@ -1,7 +1,6 @@
 {
   "name": "pencurimovie-addon",
   "version": "1.0.0",
-  "description": "Stremio Add-on",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
